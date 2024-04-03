@@ -1,6 +1,8 @@
 package com.example.htmltopdf.controllers;
 
 import com.example.htmltopdf.services.HtmlService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class HtmlController {
     private static final String INPUT_DIRECTORY = "templates/";
     private static final String FILE_NAME = "sample3.html";
     private static final String OUTPUT_DIRECTORY = "output/";
+    private static final Logger logger = LogManager.getLogger(HtmlController.class);
 
     @Autowired
     private final HtmlService htmlService;
@@ -42,11 +45,13 @@ public class HtmlController {
 
 
         try {
+            logger.info("Conversion Thymeleaf -> HTML");
             // Convert Thymeleaf template to HTML
             String htmlContent=htmlService.convertThymeleafToHtml(INPUT_DIRECTORY + FILE_NAME, variables);
             String outputPath = OUTPUT_DIRECTORY + FILE_NAME;
-            System.out.println(htmlContent);
+            logger.info("htmlContent generated");
             // save html
+            logger.info("Saving -> HTML");
             htmlService.saveHtml(htmlContent,outputPath);
             return ResponseEntity.ok("HTML conversion done");
         }  catch (IOException e) {

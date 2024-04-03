@@ -55,6 +55,12 @@
 			<version>9.1.22</version> <!-- Or the latest version available -->
 		</dependency>
 
+		<!-- Logging with Log4j -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
