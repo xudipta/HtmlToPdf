@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Complex Thymeleaf Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: blue;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${pageTitle}">Page Title</h1>
+    <p>This is a complex Thymeleaf page.</p>
+    <p th:text="${pageDescription}">Page Description</p>
+    <ul>
+        <li th:each="item : ${items}" th:text="${item}">Item</li>
+    </ul>
+    <p th:if="${showFooter}">This is the footer.</p>
+</div>
+</body>
+</html>

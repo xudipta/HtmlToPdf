@@ -5,6 +5,7 @@ import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +20,8 @@ public class PdfService {
         String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
         // Convert HTML to PDF
-        return convertHtmlToPdf(htmlContent);
+        //return convertHtmlToPdf(htmlContent);
+        return convertHtmlToPdfWithCss(htmlContent);
     }
 
     public byte[] convertHtmlToPdf(String htmlContent) throws DocumentException, IOException {
@@ -35,6 +37,19 @@ public class PdfService {
         document.close();
 
         return outputStream.toByteArray();
+    }
+
+    public byte[] convertHtmlToPdfWithCss(String htmlContent) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(htmlContent);
+            renderer.layout();
+            renderer.createPDF(outputStream);
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void savePdf(byte[] pdfBytes, String outputPath) throws IOException {
