@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"></meta>
     <title>Complex Thymeleaf Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f2f2f2;
         }
         .container {
             border: 1px solid #ccc;
             padding: 20px;
             margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
         }
         h1 {
             color: blue;
+            margin-top: 0;
+        }
+        p {
+            margin: 0 0 10px;
         }
         ul {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
         li {
             margin-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-top: 1px solid #ccc;
         }
     </style>
 </head>
@@ -33,7 +49,7 @@
     <ul>
         <li th:each="item : ${items}" th:text="${item}">Item</li>
     </ul>
-    <p th:if="${showFooter}">This is the footer.</p>
+    <p th:if="${showFooter}" class="footer">This is the footer.</p>
 </div>
 </body>
 </html>

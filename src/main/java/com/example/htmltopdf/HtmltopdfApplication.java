@@ -1,6 +1,7 @@
 package com.example.htmltopdf;
 
 import com.example.htmltopdf.controllers.HtmlController;
+import com.example.htmltopdf.controllers.PdfController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -11,10 +12,12 @@ public class HtmltopdfApplication {
 	public static void main(String[] args) {
 		ApplicationContext context=SpringApplication.run(HtmltopdfApplication.class, args);
 
-		HtmlController controller = context.getBean(HtmlController.class);
-		;
+		HtmlController htmlController = context.getBean(HtmlController.class);
 
-		controller.convertThymeleafToHtml();
+		htmlController.convertThymeleafToHtml();
+
+		PdfController pdfController = context.getBean(PdfController.class);
+		pdfController.convertHtmlFileToPdf();
 	}
 
 

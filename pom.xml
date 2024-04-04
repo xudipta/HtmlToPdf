@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.0-M3</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>htmltopdf</artifactId>
@@ -52,14 +52,18 @@
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
 			<artifactId>flying-saucer-pdf</artifactId>
-			<version>9.1.22</version> <!-- Or the latest version available -->
+			<version>9.1.22</version>
 		</dependency>
 
 		<!-- Logging with Log4j -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.apache.logging.log4j</groupId>-->
+<!--			<artifactId>log4j-api</artifactId>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.apache.logging.log4j</groupId>-->
+<!--			<artifactId>log4j-core</artifactId>-->
+<!--		</dependency>-->
 
 	</dependencies>
 

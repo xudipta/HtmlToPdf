@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Complex Thymeleaf Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Dynamic Tables</h1>
+
+    <h2>Table 1: Users</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.name}">John Doe</td>
+            <td th:text="${user.email}">john@example.com</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Table 2: Products</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}">1</td>
+            <td th:text="${product.name}">Product 1</td>
+            <td th:text="${product.price}">$10.00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Table 3: Orders</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Product</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}">1</td>
+            <td th:text="${order.user}">John Doe</td>
+            <td th:text="${order.product}">Product 1</td>
+            <td th:text="${order.quantity}">2</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
