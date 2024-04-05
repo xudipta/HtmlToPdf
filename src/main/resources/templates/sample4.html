@@ -97,6 +97,10 @@
         </tr>
         </tbody>
     </table>
+    <!-- Table 3: Orders (conditional) -->
+    <h2 th:text="'Condition: ' + ${showOrders}"></h2>
+    <p th:if="${showOrders}">This is a conditional paragraph</p>
+
 
 </div>
 </body>

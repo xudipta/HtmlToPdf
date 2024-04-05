@@ -16,7 +16,7 @@ public class PdfController {
 
     private static final String INPUT_DIRECTORY = "templates/";
     private static final String INPUT_DIRECTORY_OUTPUT = "output/";
-    private static final String FILE_NAME = "sample3.html";
+    private static final String FILE_NAME = "sample4.html";
     private static final String OUTPUT_DIRECTORY = "output/";
 
 

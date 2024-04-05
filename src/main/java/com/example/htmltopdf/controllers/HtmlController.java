@@ -1,5 +1,8 @@
 package com.example.htmltopdf.controllers;
 import com.example.htmltopdf.services.HtmlService;
+import com.example.htmltopdf.services.OrderService;
+import com.example.htmltopdf.services.ProductService;
+import com.example.htmltopdf.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +18,16 @@ import java.util.Map;
 @Log4j2
 public class HtmlController {
     private static final String INPUT_DIRECTORY = "templates/";
-    private static final String FILE_NAME = "sample3.html";
+    private static final String FILE_NAME = "sample4.html";
     private static final String OUTPUT_DIRECTORY = "output/";
     @Autowired
     private final HtmlService htmlService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    ProductService productService;
+    @Autowired
+    OrderService orderService;
 
     public HtmlController(HtmlService htmlService) {
         this.htmlService = htmlService;
@@ -72,6 +81,13 @@ public class HtmlController {
                 data.put("showFooter", true);
                 data.put("message", "this the inserted data");
                 break;
+            case "sample4":
+            case "sample5":
+                data.put("users", userService.getUsers());
+                data.put("products", productService.getProducts());
+                data.put("orders", orderService.getOrders());
+                boolean showOrders = false;
+                data.put("showOrders", showOrders);
         }
         return data;
     }
