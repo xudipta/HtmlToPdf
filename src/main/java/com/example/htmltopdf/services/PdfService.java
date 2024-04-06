@@ -1,6 +1,7 @@
 package com.example.htmltopdf.services;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -17,6 +18,8 @@ import java.util.regex.Pattern;
 public class PdfService {
     @Autowired
     ResourceLoader resourceLoader;
+    @Value("${input.css}")
+    String cssDirectory;
 
     public byte[] convertHtmlFromResource(String htmlFilePath){
         // Load HTML content from the resource folder
@@ -75,7 +78,7 @@ public class PdfService {
     private String loadCssContent(String cssFilePath) throws IOException {
         log.info("Load CSS content");
         if (cssFilePath != null) {
-            String resourcePath = "static/css" + cssFilePath;
+            String resourcePath = cssDirectory + cssFilePath;
             // Check if the CSS file is an external resource or located in the project folder
             Resource cssResource = new ClassPathResource(resourcePath);
             if (cssResource.exists()) {

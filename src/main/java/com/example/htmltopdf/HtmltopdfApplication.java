@@ -10,14 +10,16 @@ import org.springframework.context.ApplicationContext;
 public class HtmltopdfApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext context=SpringApplication.run(HtmltopdfApplication.class, args);
+		SpringApplication.run(HtmltopdfApplication.class,args);
+
+		/*ApplicationContext context=SpringApplication.run(HtmltopdfApplication.class, args);
 
 		HtmlController htmlController = context.getBean(HtmlController.class);
 
 		htmlController.convertThymeleafToHtml();
 
 		PdfController pdfController = context.getBean(PdfController.class);
-		pdfController.convertHtmlFileToPdf();
+		pdfController.convertHtmlFileToPdf();*/
 	}
 
 

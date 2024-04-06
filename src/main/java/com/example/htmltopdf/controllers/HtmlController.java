@@ -39,7 +39,7 @@ public class HtmlController {
     }
 
 
-    @GetMapping("/convertThymeleafToHtml")
+    @GetMapping("/getHtml")
     public ResponseEntity<String> convertThymeleafToHtml() {
         Map<String, Object> variables = getPageVariables(inputFileName.replaceAll("\\..*",""));
 
@@ -55,7 +55,7 @@ public class HtmlController {
             htmlService.saveHtml(htmlContent,outputPath);
             log.info("Saving -> HTML, Location: "+outputPath);
 
-            return ResponseEntity.ok("HTML conversion done");
+            return ResponseEntity.ok("HTML saved successfully at: "+outputPath);
 
         } catch (Exception e) {
             log.error(e.getMessage());

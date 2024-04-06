@@ -24,7 +24,7 @@ public class PdfController {
     @Autowired
     PdfService pdfService;
 
-    @RequestMapping("/convertHtmlFileToPdf")
+    @RequestMapping("/getPdf")
     public ResponseEntity<String> convertHtmlFileToPdf() {
         try {
             // Convert HTML to PDF
