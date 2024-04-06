@@ -5,11 +5,12 @@ import com.example.htmltopdf.services.ProductService;
 import com.example.htmltopdf.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +18,13 @@ import java.util.Map;
 @RestController
 @Log4j2
 public class HtmlController {
-    private static final String INPUT_DIRECTORY = "templates/";
-    private static final String FILE_NAME = "sample4.html";
-    private static final String OUTPUT_DIRECTORY = "output/";
+    @Value("${input.directory}")
+    private String inputDirectory;
+    @Value("${input.file.name}")
+    private String inputFileName;
+    @Value("${output.directory}")
+    private String outputDirectory;
+
     @Autowired
     private final HtmlService htmlService;
     @Autowired
@@ -36,14 +41,14 @@ public class HtmlController {
 
     @GetMapping("/convertThymeleafToHtml")
     public ResponseEntity<String> convertThymeleafToHtml() {
-        Map<String, Object> variables = getPageVariables(FILE_NAME.replaceAll("\\..*",""));
+        Map<String, Object> variables = getPageVariables(inputFileName.replaceAll("\\..*",""));
 
         try {
             // Convert Thymeleaf template to HTML
-            String htmlContent=htmlService.convertThymeleafToHtml(INPUT_DIRECTORY + FILE_NAME, variables);
+            String htmlContent=htmlService.convertThymeleafToHtml(inputDirectory + inputFileName, variables);
             log.info("Conversion Thymeleaf -> HTML");
 
-            String outputPath = OUTPUT_DIRECTORY + FILE_NAME;
+            String outputPath = outputDirectory + inputFileName;
             log.info("htmlContent generated");
 
             // save html
@@ -52,9 +57,6 @@ public class HtmlController {
 
             return ResponseEntity.ok("HTML conversion done");
 
-        }  catch (IOException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving PDF.");
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error converting HTML to PDF.");

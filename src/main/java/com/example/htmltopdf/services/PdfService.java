@@ -1,40 +1,24 @@
 package com.example.htmltopdf.services;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.pdf.PdfWriter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StreamUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 @Service
+@Log4j2
 public class PdfService {
-
-
     @Autowired
     ResourceLoader resourceLoader;
 
-
-    public byte[] convertHtmlToPdfFile(String htmlFilePath) throws DocumentException, IOException {
-        // Load HTML content from the resource folder
-        ClassPathResource resource = new ClassPathResource(htmlFilePath);
-        InputStream inputStream = resource.getInputStream();
-        String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-
-        // Convert HTML to PDF
-        //return convertHtmlToPdf(htmlContent);
-        return convertHtmlToPdfWithCss(htmlContent);
-    }
-    public byte[] convertHtmlFromResource(String htmlFilePath) throws DocumentException{
+    public byte[] convertHtmlFromResource(String htmlFilePath){
         // Load HTML content from the resource folder
         Resource resource = resourceLoader.getResource("file:"+htmlFilePath);
         String htmlContent;
@@ -45,39 +29,30 @@ public class PdfService {
                 htmlContent = FileCopyUtils.copyToString(reader);
                 return convertHtmlToPdfWithCss(htmlContent);
             }catch (IOException e){
-
+                log.error(e.getMessage());
             }
         }else {
-            System.out.println("test");
+            log.error("Html file not found in: "+htmlFilePath);
         }
         return null;
 
     }
 
-    public byte[] convertHtmlToPdf(String htmlContent) throws DocumentException, IOException {
-        Document document = new Document();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PdfWriter.getInstance(document, outputStream);
-        document.open();
-
-        // Parse HTML content and add elements to the document
-        HTMLWorker htmlWorker = new HTMLWorker(document);
-        htmlWorker.parse(new StringReader(htmlContent));
-
-        document.close();
-
-        return outputStream.toByteArray();
-    }
-
     public byte[] convertHtmlToPdfWithCss(String htmlContent) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             ITextRenderer renderer = new ITextRenderer();
-            renderer.setDocumentFromString(htmlContent);
+            // Extract CSS file path from HTML content
+            String cssFilePath = extractCssFilePath(htmlContent);
+            // Load CSS content
+            String cssContent = loadCssContent(cssFilePath);
+            // Inline CSS into HTML content
+            String htmlWithInlineCss = inlineCss(htmlContent, cssContent);
+            renderer.setDocumentFromString(htmlWithInlineCss);
             renderer.layout();
             renderer.createPDF(outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+           log.error(e.getMessage());
         }
         return null;
     }
@@ -86,5 +61,40 @@ public class PdfService {
         try (FileOutputStream fos = new FileOutputStream(outputPath)) {
             fos.write(pdfBytes);
         }
+    }
+    private String extractCssFilePath(String htmlContent) {
+        log.info("Extract CSS file path");
+        Pattern pattern = Pattern.compile("<link[^>]+href=\"([^\"]+)\"[^>]*>");
+        Matcher matcher = pattern.matcher(htmlContent);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    private String loadCssContent(String cssFilePath) throws IOException {
+        log.info("Load CSS content");
+        if (cssFilePath != null) {
+            String resourcePath = "static/css" + cssFilePath;
+            // Check if the CSS file is an external resource or located in the project folder
+            Resource cssResource = new ClassPathResource(resourcePath);
+            if (cssResource.exists()) {
+                try (InputStream inputStream = cssResource.getInputStream()) {
+                    return new String(StreamUtils.copyToByteArray(inputStream), StandardCharsets.UTF_8);
+                }
+            }else{
+                log.error("Resource not found");
+            }
+        }
+        return null;
+    }
+
+    private String inlineCss(String htmlContent, String cssContent) {
+        log.info("Insert styles in HTML file");
+        if (cssContent != null) {
+            // Replace <link> with inline <style>
+            return htmlContent.replaceFirst("<link[^>]+href=\"([^\"]+)\"[^>]*>", "<style type=\"text/css\">" + cssContent + "</style>");
+        }
+        return htmlContent;
     }
 }
